@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kolekcija Konzervi Piva</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Kolekcija Konzervi Piva</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#home">Početna</a></li>
+            <li><a href="#about">O Kolekciji</a></li>
+            <li><a href="#contact">Kontakt</a></li>
+        </ul>
+    </nav>
+    <section id="home">
+        <h2>Početna Stranica</h2>
+        <p>Dobrodošli u moju kolekciju konzervi piva iz celog sveta.</p>
+        <div>
+            <label for="countryFilter">Filtriraj po državi:</label>
+            <select id="countryFilter" onchange="filterCans()">
+                <option value="all">Sve države</option>
+            </select>
+        </div>
+        <div>
+            <label for="brandFilter">Filtriraj po brendu:</label>
+            <select id="brandFilter" onchange="filterCans()">
+                <option value="all">Svi brendovi</option>
+            </select>
+        </div>
+        <div id="cansCollection">
+            <!-- Ovde će biti prikazane limenke -->
+        </div>
+    </section>
+    <section id="about">
+        <h2>O Kolekciji</h2>
+        <p>Ovo je kolekcija konzervi piva koje sam sakupio tokom godina.</p>
+    </section>
+    <section id="contact">
+        <h2>Kontakt</h2>
+        <p>Možete me kontaktirati putem e-maila: example@example.com</p>
+    </section>
+    <footer>
+        <p>&copy; 2024 Kolekcija Konzervi Piva</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+header {
+    background: #333;
+    color: #fff;
+    padding: 1rem 0;
+    text-align: center;
+}
+
+nav ul {
+    background: #444;
+    padding: 0;
+    list-style: none;
+    text-align: center;
+}
+
+nav ul li {
+    display: inline;
+}
+
+nav ul li a {
+    color: #fff;
+    padding: 15px 20px;
+    display: inline-block;
+    text-decoration: none;
+}
+
+section {
+    padding: 2rem;
+}
+
+label {
+    font-weight: bold;
+}
+
+select {
+    margin-left: 10px;
+    padding: 5px;
+}
+
+#cansCollection {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.can {
+    border: 1px solid #ccc;
+    padding: 10px;
+    background: #fff;
+    width: 200px;
+}
+
+footer {
+    text-align: center;
+    padding: 1rem 0;
+    background: #333;
+    color: #fff;
+}
+document.addEventListener('DOMContentLoaded', () => {
+    const cans = [
+        { country: 'Germany', brand: 'Beck\'s', name: 'Beck\'s Pilsner' },
+        { country: 'Belgium', brand: 'Stella Artois', name: 'Stella Artois' },
+        { country: 'USA', brand: 'Budweiser', name: 'Budweiser' },
+        { country: 'Czech Republic', brand: 'Pilsner Urquell', name: 'Pilsner Urquell' },
+        // Dodaj još limenki ovde...
+    ];
+
+    const countryFilter = document.getElementById('countryFilter');
+    const brandFilter = document.getElementById('brandFilter');
+    const cansCollection = document.getElementById('cansCollection');
+
+    const countries = [...new Set(cans.map(can => can.country))];
+    const brands = [...new Set(cans.map(can => can.brand))];
+
+    countries.forEach(country => {
+        const option = document.createElement('option');
+        option.value = country;
+        option.textContent = country;
+        countryFilter.appendChild(option);
+    });
+
+    brands.forEach(brand => {
+        const option = document.createElement('option');
+        option.value = brand;
+        option.textContent = brand;
+        brandFilter.appendChild(option);
+    });
+
+    function displayCans(filteredCans) {
+        cansCollection.innerHTML = '';
+        filteredCans.forEach(can => {
+            const canDiv = document.createElement('div');
+            canDiv.classList.add('can');
+            canDiv.innerHTML = `<h3>${can.name}</h3><p>Država: ${can.country}</p><p>Brend: ${can.brand}</p>`;
+            cansCollection.appendChild(canDiv);
+        });
+    }
+
+    function filterCans() {
+        const selectedCountry = countryFilter.value;
+        const selectedBrand = brandFilter.value;
+        const filteredCans = cans.filter(can => 
+            (selectedCountry === 'all' || can.country === selectedCountry) &&
+            (selectedBrand === 'all' || can.brand === selectedBrand)
+        );
+        displayCans(filteredCans);
+    }
+
+    displayCans(cans);
+});
+
